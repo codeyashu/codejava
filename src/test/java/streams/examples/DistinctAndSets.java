@@ -22,6 +22,7 @@ public class DistinctAndSets {
 
     @Test
     public void distinctNumbersInSet() {
+        // Identify disctict elements in list and add it to a set
         List<Integer> numbers = List.of(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 9, 9, 9);
         Set<Integer> integerSet = numbers.stream()
                 .collect(Collectors.toSet());

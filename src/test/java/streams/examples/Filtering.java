@@ -7,13 +7,30 @@ import streams.mockdata.MockData;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
+
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class Filtering {
 
+    {
+        List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+        Optional<Integer> result = list.stream()
+                .parallel()
+                .filter(num -> num < 4)
+                .findAny();
+
+        assertTrue(result.isPresent());
+        assertThat(result.get(), anyOf(is(1), is(2), is(3)));
+    }
+
     @Test
     public void filterCar() throws IOException {
-        // filter yellow car with proce less than 2000.00
+        // filter yellow car with price less than 2000.00
         List<Car> carList = MockData.getCars();
 
         carList.stream()
@@ -52,6 +69,7 @@ public class Filtering {
 
     }
 
+    // finds first element for parallel/non-parallel stream
     @Test
     public void findFirst() {
         int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -72,6 +90,34 @@ public class Filtering {
                 .findAny()
                 .orElse(-1);
         System.out.println(result);
+    }
+
+    @Test
+    public void createStream_whenFindAnyResultIsPresent_thenCorrect() {
+
+        //finds any element which matches the criteria in the list
+        // in non-parallel it will most likely first element
+        // with parallel stream element at random position is picked
+        List<String> list = Arrays.asList("A", "B", "C", "D");
+
+        Optional<String> result = list.stream()
+                .findAny();
+
+        assertTrue(result.isPresent());
+        assertThat(result.get(), anyOf(is("A"), is("B"), is("C"), is("D")));
+    }
+
+
+    @Test
+    public void createParallelStream_whenFindAnyResultIsPresent_thenCorrect() throws Exception {
+        List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+        Optional<Integer> result = list.stream()
+                .parallel()
+                .filter(num -> num < 4)
+                .findAny();
+
+        assertTrue(result.isPresent());
+        assertThat(result.get(), anyOf(is(1), is(2), is(3)));
     }
 
     @Test

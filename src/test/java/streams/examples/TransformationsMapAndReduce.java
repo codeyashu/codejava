@@ -14,6 +14,16 @@ import java.util.stream.Collectors;
 public class TransformationsMapAndReduce {
     //Map<String, Map<String, List<Person>>> peopleByStateAndCity = personStream.collect(Collectors.groupingBy(Person::getState, Collectors.groupingBy(Person::getCity)));
 
+    private static int divide(int value, int factor) {
+        int result = 0;
+        try {
+            result = value / factor;
+        } catch (ArithmeticException e) {
+            System.err.println("Arithmetic Exception: Division by Zero");
+        }
+        return result;
+    }
+
     @Test
     void yourFirstTransformationWithMap() throws IOException {
         List<Person> people = MockData.getPeople();
@@ -55,11 +65,11 @@ public class TransformationsMapAndReduce {
 
     @Test
     public void divider() {
-        List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5, 6);
+        List<Integer> integerList = Arrays.asList(0, 1, 2, 3, 4, 5, 6);
         int divider = 2;
 
         Integer result = integerList.stream()
-                .reduce(0, (a, b) -> a / divider + b / divider);
+                .reduce(0, (a, b) -> divide(a, divider) + divide(b, divider));
         System.out.println(result);
     }
 
